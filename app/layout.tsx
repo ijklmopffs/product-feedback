@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import "./globals.css";
+import { AppProvider } from "@/context/FullProvider";
 
 const jost = Jost({ subsets: ["latin"] });
 
@@ -15,8 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${jost.className} bg-darkerWhite`}>{children}</body>
-    </html>
+    <AppProvider>
+      <html lang="en">
+        <body className={`${jost.className} bg-darkerWhite`}>{children}</body>
+      </html>
+    </AppProvider>
   );
 }
