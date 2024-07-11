@@ -9,9 +9,11 @@ import Navigation from "@/components/Navigation";
 import hamburgerIcon from "@/public/assets/shared/mobile/icon-hamburger.svg";
 import closeIcon from "@/public/assets/shared/mobile/icon-close.svg";
 import Sidebar from "@/components/Sidebar";
+import commentIcon from "@/public/assets/shared/icon-comments.svg";
+import arrowIcon from "@/public/assets/shared/icon-arrow-up.svg";
 
 export default function Home() {
-  const { sideBar, handleSideBar } = useProvider();
+  const { sideBar, handleSideBar, data } = useProvider();
 
   return (
     <main className="md:max-w-[94%] lg:max-w-[90%] mx-auto flex flex-col lg:flex-row md:p-20 md:gap-8 md:h-screen">
@@ -100,6 +102,28 @@ export default function Home() {
       </section>
       <section>
         <Navigation />
+
+        <div className="mt-10">
+          <div className="bg-white rounded-md flex items-center justify-between p-6">
+            <div className="flex gap-8">
+              <div className="flex items-center flex-col gap-1 bg-darkWhite rounded-md h-fit p-4">
+                <Image src={arrowIcon} alt="" />
+                <p className="font-bold text-xs text-darkerGrey">
+                  {data.productRequests[0].upvotes}
+                </p>
+              </div>
+              <div>
+                <h1>{data.productRequests[0].title}</h1>
+                <p>{data.productRequests[0].description}</p>
+                <p>{data.productRequests[0].category}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Image src={commentIcon} alt="" />
+              <p>{data.productRequests[0].comments.length}</p>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );

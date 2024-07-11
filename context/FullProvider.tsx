@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
+import data from "@/data/data.json";
 
 type AppContextType = {
   menu: boolean;
@@ -12,7 +13,38 @@ type AppContextType = {
   setMenu: (menu: boolean) => void;
   setSortParam: (sortParam: string) => void;
   setSideBar: (sideBar: boolean) => void;
+  data: Data;
 };
+
+export interface Comment {
+  id: number;
+  content: string;
+  user: {
+    image: string;
+    name: string;
+    username: string;
+  };
+}
+
+export interface ProductRequest {
+  id: number;
+  title: string;
+  category: string;
+  upvotes: number;
+  upvoted: boolean;
+  status: string;
+  description: string;
+  comments: Comment[];
+}
+
+export interface Data {
+  currentUser: {
+    image: string;
+    name: string;
+    username: string;
+  };
+  productRequests: ProductRequest[];
+}
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -47,6 +79,7 @@ export const AppProvider = ({ children }: any) => {
         sideBar,
         setSideBar,
         handleSideBar,
+        data,
       }}
     >
       {children}
