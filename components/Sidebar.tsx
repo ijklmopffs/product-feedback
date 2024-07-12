@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
+import { useProvider } from "@/context/FullProvider";
 
 export default function Sidebar() {
+  const { handleFilter, selectedStatus } = useProvider();
+
   return (
     <AnimatePresence>
       <motion.div
@@ -16,22 +19,64 @@ export default function Sidebar() {
         style={{ height: "calc(100vh - 57px)" }}
       >
         <div className="bg-white w-72 h-48 rounded-md p-6 flex flex-wrap gap-3">
-          <Button className="rounded-lg px-6 font-semibold text-white bg-blue text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "all"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            }  text-xs`}
+            onClick={() => handleFilter("all")}
+          >
             All
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "ui"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("ui")}
+          >
             UI
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "ux"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("ux")}
+          >
             UX
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "enhancement"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("enhancement")}
+          >
             Enhancement
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "bug"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("bug")}
+          >
             Bug
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "feature"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("feature")}
+          >
             Feature
           </Button>
         </div>

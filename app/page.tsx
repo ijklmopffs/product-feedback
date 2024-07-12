@@ -11,9 +11,31 @@ import closeIcon from "@/public/assets/shared/mobile/icon-close.svg";
 import Sidebar from "@/components/Sidebar";
 import commentIcon from "@/public/assets/shared/icon-comments.svg";
 import arrowIcon from "@/public/assets/shared/icon-arrow-up.svg";
+import ProductRequests from "@/components/ProductRequests";
 
 export default function Home() {
-  const { sideBar, handleSideBar, data } = useProvider();
+  const {
+    sideBar,
+    handleSideBar,
+    filteredRequests,
+    handleFilter,
+    selectedStatus,
+  } = useProvider();
+
+  const requests = filteredRequests.map((request) => (
+    <ProductRequests
+      key={request.id}
+      title={request.title}
+      category={request.category}
+      upvotes={request.upvotes}
+      upvoted={request.upvoted}
+      status={request.status}
+      description={request.description}
+      comments={request.comments}
+      arrowIcon={arrowIcon}
+      commentIcon={commentIcon}
+    />
+  ));
 
   return (
     <main className="md:max-w-[94%] lg:max-w-[90%] mx-auto flex flex-col lg:flex-row md:p-20 md:gap-8 md:h-screen">
@@ -43,22 +65,64 @@ export default function Home() {
         </AnimatePresence>
 
         <div className="bg-white w-72 h-48 rounded-md p-6 hidden md:flex flex-wrap gap-3">
-          <Button className="rounded-lg px-6 font-semibold text-white bg-blue text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "all"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            }  text-xs`}
+            onClick={() => handleFilter("all")}
+          >
             All
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "ui"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            }  text-xs`}
+            onClick={() => handleFilter("ui")}
+          >
             UI
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "ux"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("ux")}
+          >
             UX
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "enhancement"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("enhancement")}
+          >
             Enhancement
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "bug"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("bug")}
+          >
             Bug
           </Button>
-          <Button className="rounded-lg px-6 font-semibold text-blue bg-darkWhite text-xs">
+          <Button
+            className={`rounded-lg px-6 font-semibold ${
+              selectedStatus === "feature"
+                ? "text-white bg-blue"
+                : "text-blue bg-darkWhite"
+            } text-xs`}
+            onClick={() => handleFilter("feature")}
+          >
             Feature
           </Button>
         </div>
@@ -103,27 +167,7 @@ export default function Home() {
       <section>
         <Navigation />
 
-        <div className="mt-10">
-          <div className="bg-white rounded-md flex items-center justify-between p-6">
-            <div className="flex gap-8">
-              <div className="flex items-center flex-col gap-1 bg-darkWhite rounded-md h-fit p-4">
-                <Image src={arrowIcon} alt="" />
-                <p className="font-bold text-xs text-darkerGrey">
-                  {data.productRequests[0].upvotes}
-                </p>
-              </div>
-              <div>
-                <h1>{data.productRequests[0].title}</h1>
-                <p>{data.productRequests[0].description}</p>
-                <p>{data.productRequests[0].category}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Image src={commentIcon} alt="" />
-              <p>{data.productRequests[0].comments.length}</p>
-            </div>
-          </div>
-        </div>
+        <div className="mt-10">{requests}</div>
       </section>
     </main>
   );

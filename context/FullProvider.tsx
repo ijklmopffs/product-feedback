@@ -7,13 +7,15 @@ type AppContextType = {
   menu: boolean;
   sortParam: string;
   sideBar: boolean;
+  filteredRequests: ProductRequest[];
+  selectedStatus: string;
+  handleFilter: (status: string) => any;
   handleMenu: () => void;
   handleParam: (param: string) => void;
   handleSideBar: () => void;
   setMenu: (menu: boolean) => void;
   setSortParam: (sortParam: string) => void;
   setSideBar: (sideBar: boolean) => void;
-  data: Data;
 };
 
 export interface Comment {
@@ -52,6 +54,10 @@ export const AppProvider = ({ children }: any) => {
   const [menu, setMenu] = useState(false);
   const [sortParam, setSortParam] = useState("Most Upvotes");
   const [sideBar, setSideBar] = useState(false);
+  const [filteredRequests, setFilteredRequests] = useState<ProductRequest[]>(
+    data.productRequests
+  );
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
   const handleMenu = () => {
     setMenu((prevMenu) => !prevMenu);
@@ -67,6 +73,22 @@ export const AppProvider = ({ children }: any) => {
     console.log("works");
   };
 
+  const handleFilter = (status: string) => {
+    setSelectedStatus(status);
+    if (status === "all") {
+      setFilteredRequests(data.productRequests);
+    } else {
+      setFilteredRequests(filterByStatus(data.productRequests, status));
+    }
+  };
+
+  const filterByStatus = (
+    requests: ProductRequest[],
+    status: string
+  ): ProductRequest[] => {
+    return requests.filter((request) => request.category === status);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -79,7 +101,9 @@ export const AppProvider = ({ children }: any) => {
         sideBar,
         setSideBar,
         handleSideBar,
-        data,
+        filteredRequests,
+        handleFilter,
+        selectedStatus,
       }}
     >
       {children}

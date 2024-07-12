@@ -8,14 +8,16 @@ import ToggleMenu from "./ToggleMenu";
 import { useProvider } from "@/context/FullProvider";
 
 export default function Navigation() {
-  const { sortParam } = useProvider();
+  const { sortParam, filteredRequests } = useProvider();
+
+  const suggestions = filteredRequests.length;
 
   return (
     <div className="bg-darkGrey md:w-[50rem] lg:w-[70rem] p-4 md:rounded-lg flex items-center justify-between relative">
       <div className="flex items-center gap-12">
         <div className="hidden md:flex items-center gap-4 text-white font-bold text-lg">
           <Image src={suggestionIcon} alt="feedback" />
-          <p>6 suggestions</p>
+          <p>{suggestions} suggestions</p>
         </div>
         <div className="flex items-center gap-2">
           <p className="text-darkWhite text-sm">Sort by:</p>

@@ -6,7 +6,7 @@ import { AppProvider } from "@/context/FullProvider";
 const jost = Jost({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Product Feedback App",
+  title: "Product Feedback",
   description: "This an app for you to drop your feedback on our product.",
 };
 
