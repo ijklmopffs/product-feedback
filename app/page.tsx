@@ -24,6 +24,7 @@ export default function Home() {
 
   const requests = filteredRequests.map((request) => (
     <ProductRequests
+      id={request.id}
       key={request.id}
       title={request.title}
       category={request.category}
