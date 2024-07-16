@@ -4,7 +4,15 @@ import { useProvider } from "@/context/FullProvider";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ToggleMenu() {
-  const { menu, handleMenu, handleParam } = useProvider();
+  const {
+    menu,
+    handleMenu,
+    handleParam,
+    mostComments,
+    leastComments,
+    mostVotes,
+    leastVotes,
+  } = useProvider();
 
   return (
     <>
@@ -36,28 +44,28 @@ export default function ToggleMenu() {
           >
             <button
               className="px-3 py-1 hover:text-purple"
-              onClick={() => handleParam("Most Upvotes")}
+              onClick={() => mostVotes()}
             >
               Most Upvotes
             </button>
             <div className="bg-[#979797]/30 w-full h-[.5px]" />
             <button
               className="px-3 py-1 hover:text-purple"
-              onClick={() => handleParam("Least Upvotes")}
+              onClick={() => leastVotes()}
             >
               Least Upvotes
             </button>
             <div className="bg-[#979797]/30 w-full h-[.5px]" />
             <button
               className="px-3 py-1 hover:text-purple"
-              onClick={() => handleParam("Most Comments")}
+              onClick={() => mostComments()}
             >
               Most Comments
             </button>
             <div className="bg-[#979797]/30 w-full h-[.5px]" />
             <button
               className="px-3 py-1 hover:text-purple"
-              onClick={() => handleParam("Least Comments")}
+              onClick={() => leastComments()}
             >
               Least Comments
             </button>

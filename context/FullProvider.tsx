@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import data from "@/data/data.json";
+import { filterByVotes } from "@/helpers/capital";
 
 type AppContextType = {
   menu: boolean;
@@ -16,6 +17,10 @@ type AppContextType = {
   setMenu: (menu: boolean) => void;
   setSortParam: (sortParam: string) => void;
   setSideBar: (sideBar: boolean) => void;
+  mostComments: () => void;
+  mostVotes: () => void;
+  leastComments: () => void;
+  leastVotes: () => void;
 };
 
 export interface Comment {
@@ -55,7 +60,7 @@ export const AppProvider = ({ children }: any) => {
   const [sortParam, setSortParam] = useState("Most Upvotes");
   const [sideBar, setSideBar] = useState(false);
   const [filteredRequests, setFilteredRequests] = useState<ProductRequest[]>(
-    data.productRequests
+    filterByVotes(data.productRequests, "most")
   );
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
@@ -70,7 +75,6 @@ export const AppProvider = ({ children }: any) => {
 
   const handleSideBar = () => {
     setSideBar((prevsideBar) => !prevsideBar);
-    console.log("works");
   };
 
   const handleFilter = (status: string) => {
@@ -80,6 +84,15 @@ export const AppProvider = ({ children }: any) => {
     } else {
       setFilteredRequests(filterByStatus(data.productRequests, status));
     }
+    setSideBar(false);
+  };
+
+  const handleFilterByComments = (order: "most" | "least") => {
+    setFilteredRequests(filterByComments(data.productRequests, order));
+  };
+
+  const handleFilterByVotes = (order: "most" | "least") => {
+    setFilteredRequests(filterByVotes(data.productRequests, order));
   };
 
   const filterByStatus = (
@@ -87,6 +100,36 @@ export const AppProvider = ({ children }: any) => {
     status: string
   ): ProductRequest[] => {
     return requests.filter((request) => request.category === status);
+  };
+
+  const filterByComments = (
+    requests: ProductRequest[],
+    order: "most" | "least"
+  ): ProductRequest[] => {
+    return [...requests].sort((a, b) => {
+      return order === "most"
+        ? b.comments.length - a.comments.length
+        : a.comments.length - b.comments.length;
+    });
+  };
+
+  const mostComments = () => {
+    handleParam("Most Comments");
+    handleFilterByComments("most");
+  };
+
+  const leastComments = () => {
+    handleParam("Most Comments");
+    handleFilterByComments("least");
+  };
+
+  const mostVotes = () => {
+    handleParam("Most Upvotes");
+    handleFilterByVotes("most");
+  };
+  const leastVotes = () => {
+    handleParam("Least Upvotes");
+    handleFilterByVotes("least");
   };
 
   return (
@@ -104,6 +147,10 @@ export const AppProvider = ({ children }: any) => {
         filteredRequests,
         handleFilter,
         selectedStatus,
+        mostComments,
+        leastComments,
+        mostVotes,
+        leastVotes,
       }}
     >
       {children}

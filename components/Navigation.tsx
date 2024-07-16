@@ -13,7 +13,7 @@ export default function Navigation() {
   const suggestions = filteredRequests.length;
 
   return (
-    <div className="bg-darkGrey md:w-[50rem] lg:w-[70rem] p-4 md:rounded-lg flex items-center justify-between relative">
+    <div className="bg-darkGrey md:w-auto lg:w-[70rem] p-4 md:rounded-lg flex items-center justify-between relative">
       <div className="flex items-center gap-12">
         <div className="hidden md:flex items-center gap-4 text-white font-bold text-lg">
           <Image src={suggestionIcon} alt="feedback" />

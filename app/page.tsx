@@ -12,6 +12,7 @@ import Sidebar from "@/components/Sidebar";
 import commentIcon from "@/public/assets/shared/icon-comments.svg";
 import arrowIcon from "@/public/assets/shared/icon-arrow-up.svg";
 import ProductRequests from "@/components/ProductRequests";
+import EmptySuggestion from "@/components/EmptySuggestion";
 
 export default function Home() {
   const {
@@ -22,24 +23,30 @@ export default function Home() {
     selectedStatus,
   } = useProvider();
 
-  const requests = filteredRequests.map((request) => (
-    <ProductRequests
-      id={request.id}
-      key={request.id}
-      title={request.title}
-      category={request.category}
-      upvotes={request.upvotes}
-      upvoted={request.upvoted}
-      status={request.status}
-      description={request.description}
-      comments={request.comments}
-      arrowIcon={arrowIcon}
-      commentIcon={commentIcon}
-    />
-  ));
+  let requests;
+
+  if (filteredRequests.length === 0) {
+    requests = <EmptySuggestion />;
+  } else {
+    requests = filteredRequests.map((request) => (
+      <ProductRequests
+        id={request.id}
+        key={request.id}
+        title={request.title}
+        category={request.category}
+        upvotes={request.upvotes}
+        upvoted={request.upvoted}
+        status={request.status}
+        description={request.description}
+        comments={request.comments}
+        arrowIcon={arrowIcon}
+        commentIcon={commentIcon}
+      />
+    ));
+  }
 
   return (
-    <main className="md:max-w-[94%] lg:max-w-[90%] mx-auto flex flex-col lg:flex-row md:p-20 md:gap-8 md:h-screen">
+    <main className="md:max-w-[94%] lg:max-w-[100rem] mx-auto flex flex-col lg:flex-row md:p-20 md:gap-8 md:h-screen">
       <section className="flex md:flex-row lg:flex-col justify-between md:gap-2 lg:gap-0 md:h-fit lg:h-[38rem]">
         <div className="bg-gradient-to-r from-blue via-purple to-orangeShade w-screen md:rounded-md md:w-60 lg:w-72 md:h-48 lg:h-40 p-3 flex justify-between items-center">
           <div className="flex flex-col gap-1 justify-end">
