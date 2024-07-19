@@ -10,7 +10,6 @@ import hamburgerIcon from "@/public/assets/shared/mobile/icon-hamburger.svg";
 import closeIcon from "@/public/assets/shared/mobile/icon-close.svg";
 import Sidebar from "@/components/Sidebar";
 import commentIcon from "@/public/assets/shared/icon-comments.svg";
-import arrowIcon from "@/public/assets/shared/icon-arrow-up.svg";
 import ProductRequests from "@/components/ProductRequests";
 import EmptySuggestion from "@/components/EmptySuggestion";
 
@@ -39,7 +38,6 @@ export default function Home() {
         status={request.status}
         description={request.description}
         comments={request.comments}
-        arrowIcon={arrowIcon}
         commentIcon={commentIcon}
       />
     ));

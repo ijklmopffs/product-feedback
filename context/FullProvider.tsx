@@ -21,6 +21,8 @@ type AppContextType = {
   mostVotes: () => void;
   leastComments: () => void;
   leastVotes: () => void;
+  getRequestById: (id: number) => ProductRequest | undefined;
+  increaseUpvotes: (id: number) => void;
 };
 
 export interface Comment {
@@ -132,6 +134,26 @@ export const AppProvider = ({ children }: any) => {
     handleFilterByVotes("least");
   };
 
+  const getRequestById = (id: number): ProductRequest | undefined => {
+    return filteredRequests.find((request) => request.id === id);
+  };
+
+  const increaseUpvotes = (id: number) => {
+    setFilteredRequests((prevRequests) =>
+      prevRequests.map((request) =>
+        request.id === id
+          ? {
+              ...request,
+              upvotes: request.upvoted
+                ? request.upvotes - 1
+                : request.upvotes + 1,
+              upvoted: !request.upvoted,
+            }
+          : request
+      )
+    );
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -151,6 +173,8 @@ export const AppProvider = ({ children }: any) => {
         leastComments,
         mostVotes,
         leastVotes,
+        getRequestById,
+        increaseUpvotes,
       }}
     >
       {children}
