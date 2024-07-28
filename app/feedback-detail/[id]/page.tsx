@@ -2,18 +2,35 @@
 
 import ProductRequests from "@/components/ProductRequests";
 import { useProvider } from "@/context/FullProvider";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import commentIcon from "@/public/assets/shared/icon-comments.svg";
+import backIcon from "@/public/assets/shared/icon-arrow-left.svg";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import SuggestionDetail from "@/components/SuggestionDetail";
+import { useState } from "react";
 
 export default function FeedbackDetail() {
   const { getRequestById } = useProvider();
+  const [value, setValue] = useState("");
+  const [charCount, setCharCount] = useState(250);
+
   const params = useParams();
+  const router = useRouter();
   const id = params?.id;
 
   if (!id) return <p>Loading...</p>;
 
   const productId = parseInt(id as string, 10);
   const product = getRequestById(productId);
+  const handleInputChange = (e: any) => {
+    const value = e.target.value;
+    setValue(value);
+    setCharCount(value.length);
+  };
+  const handleBack = () => {
+    router.back();
+  };
 
   let productRequests;
 
@@ -35,8 +52,50 @@ export default function FeedbackDetail() {
   }
 
   return (
-    <main className="max-w-6xl mx-auto h-screen">
+    <main className="max-w-7xl md:p-20 w-11/12 md:w-auto mx-auto my-40 h-screen flex flex-col gap-4 justify-center">
+      <div className="flex items-center justify-between">
+        <Button
+          className="flex items-center gap-2 bg-transparent"
+          onClick={handleBack}
+        >
+          <Image src={backIcon} alt="" />
+          <p className="text-lightGrey font-bold text-sm">Go Back</p>
+        </Button>
+        <Button className="p-6 bg-blue text-darkWhite flex items-center gap-2 font-bold text-sm rounded-xl">
+          Edit Feedback
+        </Button>
+      </div>
       <div>{productRequests}</div>
+
+      <section className="bg-white rounded-md p-6">
+        <p className="font-bold text-lg text-darkerGrey">
+          {product?.comments.length} comments
+        </p>
+
+        <SuggestionDetail product={product?.comments!} />
+      </section>
+
+      <section className="bg-white rounded-md p-6">
+        <h2 className="text-darkerGrey text-lg font-bold">Add Comment</h2>
+        <div>
+          <input
+            type="text"
+            name="comment"
+            value={value}
+            onChange={handleInputChange}
+            placeholder="Type your comment here"
+            className="w-full bg-darkerWhite p-8 pb-16 pt-6 my-5 focus:outline-none"
+            // disabled={charCount == 0}
+            maxLength={250}
+          />
+          <div className="flex items-center justify-between">
+            <p className="text-lightGrey text-sm">
+              {value == "" ? 250 : 250 - charCount} Characters left
+            </p>
+            <Button className="bg-purple">Post Comment</Button>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

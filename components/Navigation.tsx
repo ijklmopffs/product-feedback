@@ -6,9 +6,15 @@ import suggestionIcon from "@/public/assets/suggestions/icon-suggestions.svg";
 import plusIcon from "@/public/assets/shared/icon-plus.svg";
 import ToggleMenu from "./ToggleMenu";
 import { useProvider } from "@/context/FullProvider";
+import { useRouter } from "next/navigation";
 
 export default function Navigation() {
   const { sortParam, filteredRequests } = useProvider();
+  const router = useRouter();
+
+  const newFeedback = () => {
+    router.push("/new-feedback");
+  };
 
   const suggestions = filteredRequests.length;
 
@@ -25,7 +31,10 @@ export default function Navigation() {
           <ToggleMenu />
         </div>
       </div>
-      <Button className="p-6 bg-purple flex items-center gap-2 font-bold text-sm rounded-xl">
+      <Button
+        onClick={newFeedback}
+        className="p-6 bg-purple flex items-center gap-2 font-bold text-sm rounded-xl"
+      >
         <Image src={plusIcon} alt="" />
         Add Feedback
       </Button>

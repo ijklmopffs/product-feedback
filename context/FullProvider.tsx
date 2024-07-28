@@ -33,6 +33,15 @@ export interface Comment {
     name: string;
     username: string;
   };
+  replies?: {
+    content: string;
+    replyingTo: string;
+    user: {
+      image: string;
+      name: string;
+      username: string;
+    };
+  }[];
 }
 
 export interface ProductRequest {

@@ -7,7 +7,6 @@ export default function ToggleMenu() {
   const {
     menu,
     handleMenu,
-    handleParam,
     mostComments,
     leastComments,
     mostVotes,
