@@ -52,7 +52,7 @@ export default function FeedbackDetail() {
   }
 
   return (
-    <main className="max-w-7xl md:p-20 w-11/12 md:w-auto mx-auto my-40 h-screen flex flex-col gap-4 justify-center">
+    <main className="max-w-7xl md:p-20 w-11/12 md:w-auto mx-auto my-16 md:my-0 h-screen flex flex-col gap-4 justify-center">
       <div className="flex items-center justify-between">
         <Button
           className="flex items-center gap-2 bg-transparent"
@@ -85,7 +85,6 @@ export default function FeedbackDetail() {
             onChange={handleInputChange}
             placeholder="Type your comment here"
             className="w-full bg-darkerWhite p-8 pb-16 pt-6 my-5 focus:outline-none"
-            // disabled={charCount == 0}
             maxLength={250}
           />
           <div className="flex items-center justify-between">

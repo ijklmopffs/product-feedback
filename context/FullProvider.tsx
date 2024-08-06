@@ -1,8 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import data from "@/data/data.json";
 import { filterByVotes } from "@/helpers/capital";
+import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 type AppContextType = {
   menu: boolean;
@@ -10,6 +12,9 @@ type AppContextType = {
   sideBar: boolean;
   filteredRequests: ProductRequest[];
   selectedStatus: string;
+  title: string;
+  details: string;
+  category: string;
   handleFilter: (status: string) => any;
   handleMenu: () => void;
   handleParam: (param: string) => void;
@@ -23,6 +28,10 @@ type AppContextType = {
   leastVotes: () => void;
   getRequestById: (id: number) => ProductRequest | undefined;
   increaseUpvotes: (id: number) => void;
+  handleAddRequest: (e: React.FormEvent<HTMLFormElement>) => void;
+  setTitle: (title: string) => void;
+  setDetails: (details: string) => void;
+  setCategory: (category: string) => void;
 };
 
 export interface Comment {
@@ -74,6 +83,49 @@ export const AppProvider = ({ children }: any) => {
     filterByVotes(data.productRequests, "most")
   );
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [title, setTitle] = useState<string>("");
+  const [details, setDetails] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const savedRequests = localStorage.getItem("productRequests");
+    if (savedRequests) {
+      const parsedRequests = JSON.parse(savedRequests);
+      setFilteredRequests(filterByVotes(parsedRequests, "most"));
+    } else {
+      setFilteredRequests(filterByVotes(data.productRequests, "most"));
+    }
+  }, []);
+
+  const handleAddRequest = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const newRequest = {
+      id: Math.floor(Math.random() * (1000000 - 13 + 1)) + 13,
+      title,
+      category,
+      upvotes: 0,
+      upvoted: false,
+      status: "suggestion",
+      description: details,
+      comments: [],
+    };
+
+    const updatedRequests = [...filteredRequests, newRequest];
+
+    localStorage.setItem("productRequests", JSON.stringify(updatedRequests));
+    setFilteredRequests(filterByVotes(updatedRequests, "most"));
+
+    setSelectedStatus("all");
+
+    setTitle("");
+    setCategory("");
+    setDetails("");
+
+    router.push("/");
+    console.log(filteredRequests);
+  };
 
   const handleMenu = () => {
     setMenu((prevMenu) => !prevMenu);
@@ -184,6 +236,13 @@ export const AppProvider = ({ children }: any) => {
         leastVotes,
         getRequestById,
         increaseUpvotes,
+        title,
+        details,
+        category,
+        handleAddRequest,
+        setTitle,
+        setDetails,
+        setCategory,
       }}
     >
       {children}

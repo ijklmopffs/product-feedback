@@ -8,8 +8,6 @@ type Product = {
 };
 
 export default function SuggestionDetail({ product }: Product) {
-  console.log(product);
-
   return (
     <div>
       {product.map((sync, index) => (
