@@ -15,10 +15,13 @@ type AppContextType = {
   title: string;
   details: string;
   category: string;
+  commentValue: string;
+  charCount: number;
   handleFilter: (status: string) => any;
   handleMenu: () => void;
   handleParam: (param: string) => void;
   handleSideBar: () => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setMenu: (menu: boolean) => void;
   setSortParam: (sortParam: string) => void;
   setSideBar: (sideBar: boolean) => void;
@@ -32,6 +35,17 @@ type AppContextType = {
   setTitle: (title: string) => void;
   setDetails: (details: string) => void;
   setCategory: (category: string) => void;
+  addComment: (
+    productId: number,
+    comment: string,
+    user: { image: string; name: string; username: string }
+  ) => void;
+  setCommentValue: (commentValue: string) => void;
+  addReply: (
+    commentId: number,
+    replyContent: string,
+    currentUser: Data["currentUser"]
+  ) => void;
 };
 
 export interface Comment {
@@ -86,7 +100,14 @@ export const AppProvider = ({ children }: any) => {
   const [title, setTitle] = useState<string>("");
   const [details, setDetails] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  const [commentValue, setCommentValue] = useState("");
+  const [charCount, setCharCount] = useState(250);
   const router = useRouter();
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCommentValue(value);
+    setCharCount(value.length);
+  };
 
   useEffect(() => {
     const savedRequests = localStorage.getItem("productRequests");
@@ -124,7 +145,6 @@ export const AppProvider = ({ children }: any) => {
     setDetails("");
 
     router.push("/");
-    console.log(filteredRequests);
   };
 
   const handleMenu = () => {
@@ -215,6 +235,71 @@ export const AppProvider = ({ children }: any) => {
     );
   };
 
+  const addComment = (
+    productId: number,
+    comment: string,
+    user: { image: string; name: string; username: string }
+  ) => {
+    const updatedRequests = filteredRequests.map((request) => {
+      if (request.id === productId) {
+        const newComment = {
+          id: Math.floor(Math.random() * (1000000 - 13 + 1)) + 13,
+          content: comment,
+          user: user,
+          replies: [],
+        };
+
+        return {
+          ...request,
+          comments: [...request.comments, newComment],
+        };
+      }
+      return request;
+    });
+
+    setFilteredRequests(updatedRequests);
+
+    localStorage.setItem("productRequests", JSON.stringify(updatedRequests));
+  };
+
+  const addReply = (
+    commentId: number,
+    replyContent: string,
+    currentUser: Data["currentUser"]
+  ) => {
+    const updatedRequests = filteredRequests.map((request) => {
+      // Iterate through each comment in the request
+      const updatedComments = request.comments.map((comment) => {
+        if (comment.id === commentId) {
+          // Add the new reply to the replies array
+          const newReply = {
+            content: replyContent,
+            replyingTo: comment.user.username,
+            user: {
+              image: currentUser.image,
+              name: currentUser.name,
+              username: currentUser.username,
+            },
+          };
+          return {
+            ...comment,
+            replies: [...(comment.replies || []), newReply],
+          };
+        }
+        return comment;
+      });
+
+      return {
+        ...request,
+        comments: updatedComments,
+      };
+    });
+
+    // Update the state with the new requests
+    setFilteredRequests(updatedRequests);
+    localStorage.setItem("productRequests", JSON.stringify(updatedRequests));
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -243,6 +328,12 @@ export const AppProvider = ({ children }: any) => {
         setTitle,
         setDetails,
         setCategory,
+        commentValue,
+        handleInputChange,
+        charCount,
+        addComment,
+        setCommentValue,
+        addReply,
       }}
     >
       {children}

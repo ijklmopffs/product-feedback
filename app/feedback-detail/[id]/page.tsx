@@ -8,12 +8,16 @@ import backIcon from "@/public/assets/shared/icon-arrow-left.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import SuggestionDetail from "@/components/SuggestionDetail";
-import { useState } from "react";
 
 export default function FeedbackDetail() {
-  const { getRequestById } = useProvider();
-  const [value, setValue] = useState("");
-  const [charCount, setCharCount] = useState(250);
+  const {
+    getRequestById,
+    commentValue,
+    handleInputChange,
+    charCount,
+    addComment,
+    setCommentValue,
+  } = useProvider();
 
   const params = useParams();
   const router = useRouter();
@@ -23,11 +27,6 @@ export default function FeedbackDetail() {
 
   const productId = parseInt(id as string, 10);
   const product = getRequestById(productId);
-  const handleInputChange = (e: any) => {
-    const value = e.target.value;
-    setValue(value);
-    setCharCount(value.length);
-  };
   const handleBack = () => {
     router.back();
   };
@@ -51,8 +50,23 @@ export default function FeedbackDetail() {
     );
   }
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (commentValue.trim() === "") return;
+    const currentUser = {
+      image: "/assets/user-images/image-nuel.jpg",
+      name: "Nuel Elekwachi",
+      username: "ijkmnffs",
+    };
+
+    addComment(productId, commentValue, currentUser);
+
+    setCommentValue("");
+  };
+
   return (
-    <main className="max-w-7xl md:p-20 w-11/12 md:w-auto mx-auto my-16 md:my-0 h-screen flex flex-col gap-4 justify-center">
+    <main className="max-w-7xl md:p-20 w-11/12 md:w-auto mx-auto my-40 h-screen flex flex-col gap-4 justify-center">
       <div className="flex items-center justify-between">
         <Button
           className="flex items-center gap-2 bg-transparent"
@@ -77,11 +91,11 @@ export default function FeedbackDetail() {
 
       <section className="bg-white rounded-md p-6">
         <h2 className="text-darkerGrey text-lg font-bold">Add Comment</h2>
-        <div>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="comment"
-            value={value}
+            value={commentValue}
             onChange={handleInputChange}
             placeholder="Type your comment here"
             className="w-full bg-darkerWhite p-8 pb-16 pt-6 my-5 focus:outline-none"
@@ -89,11 +103,13 @@ export default function FeedbackDetail() {
           />
           <div className="flex items-center justify-between">
             <p className="text-lightGrey text-sm">
-              {value == "" ? 250 : 250 - charCount} Characters left
+              {commentValue == "" ? 250 : 250 - charCount} Characters left
             </p>
-            <Button className="bg-purple">Post Comment</Button>
+            <Button className="bg-purple" type="submit">
+              Post Comment
+            </Button>
           </div>
-        </div>
+        </form>
       </section>
     </main>
   );

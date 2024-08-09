@@ -1,13 +1,28 @@
 "use client";
 
-import { Comment } from "@/context/FullProvider";
+import { Comment, useProvider } from "@/context/FullProvider";
 import Image from "next/image";
+import { Button } from "./ui/button";
+import { useState } from "react";
 
 type Product = {
   product: Comment[];
 };
 
 export default function SuggestionDetail({ product }: Product) {
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [replyValue, setReplyValue] = useState("");
+  const { addReply } = useProvider();
+
+  const handleReplyClick = (commentId: number) => {
+    setReplyingTo(replyingTo === commentId ? null : commentId);
+  };
+
+  const handleReplyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setReplyValue(value);
+  };
+
   return (
     <div>
       {product.map((sync, index) => (
@@ -31,12 +46,35 @@ export default function SuggestionDetail({ product }: Product) {
               </div>
             </div>
             <div>
-              <p className="font-semibold text-xs text-blue">Reply</p>
+              <Button
+                className="bg-transparent border-none hover:bg-transparent hover:border-none"
+                onClick={() => handleReplyClick(sync.id)}
+              >
+                <p className="font-semibold text-xs text-blue">Reply</p>
+              </Button>
             </div>
           </div>
           <p className="text-lightGrey font-normal text-sm my-3 md:ml-28">
             {sync.content}
           </p>
+          {replyingTo === sync.id && (
+            <div className="md:max-w-[80%] mx-auto">
+              <form action="" className="flex items-center gap-8">
+                <input
+                  type="text"
+                  name="comment"
+                  value={replyValue}
+                  onChange={handleReplyChange}
+                  placeholder="Type your comment here"
+                  className="w-4/5 bg-darkerWhite p-8 pb-16 pt-6 my-5 focus:outline-none"
+                />
+                <Button className="bg-purple" type="submit">
+                  Post Reply
+                </Button>
+              </form>
+            </div>
+          )}
+
           <div>
             {sync.replies?.map((more) => (
               <div key={more.content} className="my-6">
