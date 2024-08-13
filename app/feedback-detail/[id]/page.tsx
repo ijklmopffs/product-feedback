@@ -66,7 +66,7 @@ export default function FeedbackDetail() {
   };
 
   return (
-    <main className="max-w-7xl md:p-20 w-11/12 md:w-auto mx-auto my-40 h-screen flex flex-col gap-4 justify-center">
+    <main className="max-w-7xl md:p-20 w-11/12 md:w-auto mx-auto my-96 h-screen flex flex-col gap-4 justify-center">
       <div className="flex items-center justify-between">
         <Button
           className="flex items-center gap-2 bg-transparent"

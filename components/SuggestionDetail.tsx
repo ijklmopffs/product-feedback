@@ -59,7 +59,24 @@ export default function SuggestionDetail({ product }: Product) {
           </p>
           {replyingTo === sync.id && (
             <div className="md:max-w-[80%] mx-auto">
-              <form action="" className="flex items-center gap-8">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+
+                  if (replyValue.trim() === "") return;
+                  const currentUser = {
+                    image: "/assets/user-images/image-nuel.jpg",
+                    name: "Nuel Elekwachi",
+                    username: "ijkmnffs",
+                  };
+
+                  addReply(sync.id, replyValue, currentUser);
+
+                  setReplyValue("");
+                  setReplyingTo(null);
+                }}
+                className="flex items-center gap-8"
+              >
                 <input
                   type="text"
                   name="comment"
@@ -97,7 +114,12 @@ export default function SuggestionDetail({ product }: Product) {
                     </div>
                   </div>
                   <div>
-                    <p className="font-semibold text-xs text-blue">Reply</p>
+                    <Button
+                      className="bg-transparent border-none hover:bg-transparent hover:border-none"
+                      onClick={() => handleReplyClick(sync.id)}
+                    >
+                      <p className="font-semibold text-xs text-blue">Reply</p>
+                    </Button>
                   </div>
                 </div>
                 <div className="my-5 ml-12 md:ml-28">

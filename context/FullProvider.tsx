@@ -4,7 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import data from "@/data/data.json";
 import { filterByVotes } from "@/helpers/capital";
 import { useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
 
 type AppContextType = {
   menu: boolean;
