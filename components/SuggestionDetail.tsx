@@ -114,10 +114,7 @@ export default function SuggestionDetail({ product }: Product) {
                     </div>
                   </div>
                   <div>
-                    <Button
-                      className="bg-transparent border-none hover:bg-transparent hover:border-none"
-                      onClick={() => handleReplyClick(sync.id)}
-                    >
+                    <Button className="bg-transparent border-none hover:bg-transparent hover:border-none">
                       <p className="font-semibold text-xs text-blue">Reply</p>
                     </Button>
                   </div>

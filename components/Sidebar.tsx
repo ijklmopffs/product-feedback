@@ -85,7 +85,7 @@ export default function Sidebar() {
           <div className="flex items-center justify-between">
             <h2 className="text-darkerGrey font-bold text-lg">Roadmap</h2>
             <Link
-              href="/"
+              href="/roadmap"
               className="text-blue underline font-semibold text-xs"
             >
               View
